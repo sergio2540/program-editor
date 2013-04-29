@@ -1,0 +1,21 @@
+{
+  "name": "crowdProcess-program-editor",
+  "description": "A CrowdProcess Program Editor",
+  "version": "0.0.1",
+  "engines": {
+    "node": {
+      "node": ">=0.10.x"
+    }
+  },
+  "scripts": {
+    "live": "./node_modules/live-server/live-server.js ./live"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-browserify": "~0.2.3",
+    "grunt-contrib-watch": "~0.3.1",
+    "m2e": "~0.5.0",
+    "grunt-contrib-copy": "~0.4.1"
+  }
+}
