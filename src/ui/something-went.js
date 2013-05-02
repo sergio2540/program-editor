@@ -4,7 +4,7 @@ function somethingWent (msg, how) {
   el.classList.add(how);
   el.innerHTML = msg;
   setTimeout(function () {
-    el.style.display = 'none'; // hacky shit
+    el.parentNode.removeChild(el);
   }, 10000);
   return el;
 }

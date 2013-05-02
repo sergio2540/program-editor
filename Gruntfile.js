@@ -2,6 +2,11 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
+      options: {
+        browser: true,
+        shadow: true,
+        es5: true
+      },
       all: ['Gruntfile.js',
             'src/**/*.js']
     },
@@ -10,6 +15,7 @@ module.exports = function(grunt) {
         src: 'src/main.js',
         dest: 'live/main.js',
         options: {
+          transform: ['brfs'],
           debug: true
         }
       },
@@ -17,7 +23,7 @@ module.exports = function(grunt) {
         src: 'src/worker.js',
         dest: 'live/worker.js',
         options: {
-          debug: true
+          //debug: true
         }
       }
     },

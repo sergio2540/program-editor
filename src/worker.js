@@ -1,5 +1,6 @@
 var M2E = require('m2e');
 var normalizeError = require('./normalize-error');
+var assert = require('assert');
 
 
 var channel = new M2E();
@@ -48,9 +49,11 @@ var program = (function getProgram(
     programTime
     ) {
 
-  var Run = require('./program'); // maybe some npm link magic ?
-  var res = { fn: Run };
+  var _require = PROGRAM;
+
+  var res = { fn: _require(1) };
   return res;
+
 }).call({});
 var programTime = Date.now() - startTs;
 channel.emit('ready', programTime);
@@ -78,4 +81,9 @@ function onData (data) {
 
   if (!isAsync)
     cb(result);
+}
+
+function log() {
+  var args = Array.prototype.slice.call(arguments);
+  channel.emit('log', args);
 }
