@@ -86,6 +86,7 @@ var program = (function getProgram(
 
     var result;
     try {
+      log(program);
       result = program.apply(null, args);
     } catch (e) {
       channel.emit('fail', { lineno: e.lineno, message: e.message });
