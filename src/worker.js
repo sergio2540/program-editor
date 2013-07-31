@@ -54,13 +54,12 @@ var program = (function getProgram(
     programTime
     ) {
 
-  try { // the regular Run function was specified
-    if (Run && Run instanceof Function)
-      return Run;
-  } catch (err) { // might be trying to use browserify
-    var _require = PROGRAM();
+  var _require = PROGRAM();
+  
+  if (_require.name === 'Run')
+    return _require;
+  else // using browserify ?
     return _require(1);
-  }
 
 }).call(global, global, global);
 
@@ -74,7 +73,6 @@ var program = (function getProgram(
     var start = Date.now();
 
     var args = [data];
-    log(args);
 
     function cb(result) {
       var time = Date.now() - start;
@@ -86,7 +84,6 @@ var program = (function getProgram(
 
     var result;
     try {
-      log(program);
       result = program.apply(null, args);
     } catch (e) {
       channel.emit('fail', { lineno: e.lineno, message: e.message });
