@@ -9,7 +9,10 @@ var argv = optimist
 
 var createServer = require('./server');
 
-var server = createServer(argv.p);
+var path = require('path');
+var programPath = path.resolve(argv.p);
+
+var server = createServer(programPath);
 server.listen(8081, function () {
   console.log('Point your browser to http://localhost:8081');
 });
