@@ -1,7 +1,6 @@
 var createWorker = require('./create-worker');
 var dealWithWorkerAndUpdateUI = require('./deal-with-worker-and-update-UI.js');
-var host = window.location.host;
-var ws = new WebSocket('ws://'+host);
+var ws = new WebSocket('ws://'+window.location.host);
 
 var wwChannel;
 

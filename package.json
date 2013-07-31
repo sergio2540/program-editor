@@ -1,7 +1,10 @@
 {
   "name": "crowdProcess-program-editor",
   "description": "A CrowdProcess Program Editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "bin": {
+    "program-editor": "./bin.js"
+  },
   "engines": {
     "node": {
       "node": ">=0.10.x"
@@ -15,12 +18,13 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-browserify": "~0.2.3",
     "grunt-contrib-watch": "~0.3.1",
-    "m2e": "~0.5.0",
     "grunt-contrib-copy": "~0.4.1",
     "brfs": "0.0.4"
   },
   "dependencies": {
     "express": "~3.2.1",
-    "ws": "~0.4.25"
+    "ws": "~0.4.25",
+    "m2e": "~0.6.1",
+    "optimist": "~0.6.0"
   }
 }

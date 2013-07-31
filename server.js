@@ -4,34 +4,34 @@ var path = require('path');
 var express = require('express');
 var ws = require('ws');
 
-var program = process.env.program || './program/build/program.min.js';
-var PROGRAM = path.normalize(program);
+var programPath; // will be defined at usage time
 
 var app = express();
-
-app.use(express.static('live', { maxAge: 0 }));
-
-
+app.use(express.static(__dirname + '/live', { maxAge: 0 }));
 var WebSocketServer = ws.Server;
-
 
 var server = http.createServer(app);
 var wss = new WebSocketServer({server: server});
 var sendProgram = require('./lib/send-program');
 
-wss.on('connection', function(ws) {
+function createServer(programPath) {
+  wss.on('connection', function(ws) {
+    sendProgram(ws, programPath, sentProgram);
 
-  sendProgram(ws, PROGRAM, sentProgram);
+    fs.watch(programPath, function (ev, filename) {
+      if (ev !== 'change')
+        return; // don't care
+      sendProgram(ws, programPath, sentProgram);
+    });
 
-  fs.watch(PROGRAM, function (event, filename) {
-    if (event === 'change')
-      sendProgram(ws, PROGRAM, sentProgram);
+    ws.on('close', function() {
+      console.log('unwatching!');
+      fs.unwatchFile(programPath);
+    });
   });
 
-  ws.on('close', function() {
-    fs.unwatchFile(PROGRAM);
-  });
-});
+  return server;
+}
 
 function sentProgram (err) {
   if (err)
@@ -39,4 +39,4 @@ function sentProgram (err) {
   console.log('sent new program');
 }
 
-server.listen(8081);
+module.exports = createServer;

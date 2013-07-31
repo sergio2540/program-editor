@@ -1,26 +1,28 @@
 var M2E = require('m2e');
-var normalizeError = require('./normalize-error');
-var assert = require('assert');
 
+var channel = new M2E(self.postMessage.bind(self));
 
-var channel = new M2E();
-channel.sendMessage = self.postMessage.bind(self);
-self.onmessage = function(event) {
-  channel.onmessage(event.data);
-};
+function log() {
+  var args = Array.prototype.slice.call(arguments);
+  channel.emit('log', args);
+}
 
-channel.on('data', onData);
+//log('helloooo');
 
 var startTs = Date.now();
+var global = {};
 var program = (function getProgram(
     self,
+    window,
+    global,
+    //log,
     arguments,
     eval,
     alert,
     prompt,
+    require,
     $,
     document,
-    window,
     navigator,
     XMLHttpRequest,
     Function,
@@ -37,53 +39,61 @@ var program = (function getProgram(
     history,
     print,
     postMessage,
+    onmessge,
     parent,
     profile,
     q,
     top,
     Worker,
+
+    // locals
+    startTs,
     program,
     getProgram,
-    startTs,
     endTs,
     programTime
     ) {
 
-  var _require = PROGRAM;
-
-  var res = { fn: _require(1) };
-  return res;
-
-}).call({});
-var programTime = Date.now() - startTs;
-channel.emit('ready', programTime);
-
-
-function onData (data) {
-  var start = Date.now();
-  var args = [data];
-
-  function cb(result) {
-    var time = Date.now() - start;
-    channel.emit('result', result, time);
+  try { // the regular Run function was specified
+    if (Run && Run instanceof Function)
+      return Run;
+  } catch (err) { // might be trying to use browserify
+    var _require = PROGRAM();
+    return _require(1);
   }
 
-  var isAsync = program.fn.length === 2;
-  if (isAsync)
-    args.push(cb);
+}).call(global, global, global);
 
-  var result;
-  try {
-    result = program.fn.apply(null, args);
-  } catch (error) {
-    channel.emit('fail', normalizeError(error));
+(function () {
+  self.addEventListener('message', function(e) { channel.onMessage(e.data); });
+
+  channel.on('data', onData);
+  channel.emit('ready', Date.now() - startTs);
+
+  function onData(data) {
+    var start = Date.now();
+
+    var args = [data];
+    log(args);
+
+    function cb(result) {
+      var time = Date.now() - start;
+      channel.emit('result', result, time);
+    }
+
+    if (program.async)
+      args.push(cb);
+
+    var result;
+    try {
+      result = program.apply(null, args);
+    } catch (e) {
+      channel.emit('fail', { lineno: e.lineno, message: e.message });
+      return;
+    }
+
+    if (!program.isAsync)
+      cb(result);
   }
 
-  if (!isAsync)
-    cb(result);
-}
-
-function log() {
-  var args = Array.prototype.slice.call(arguments);
-  channel.emit('log', args);
-}
+})();

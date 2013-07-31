@@ -5,9 +5,11 @@ module.exports = function(grunt) {
       options: {
         browser: true,
         shadow: true,
-        es5: true
+        '-W024': true
       },
-      all: ['Gruntfile.js',
+      all: ['*.js',
+            'lib/*.js',
+            'static-assets/*.js',
             'src/**/*.js']
     },
     browserify: {
@@ -15,8 +17,8 @@ module.exports = function(grunt) {
         src: 'src/main.js',
         dest: 'live/main.js',
         options: {
-          transform: ['brfs'],
-          debug: true
+          transform: ['brfs']
+          //debug: true
         }
       },
       worker: {
