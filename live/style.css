@@ -1,0 +1,14 @@
+@import url("//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css");
+
+body .container-fluid {
+  width: 670px;
+  margin: 0 auto;
+}
+
+#test {
+  margin-left: 80%; /* hacky shit ;) */
+}
+
+textarea {
+  width: 100%;
+}

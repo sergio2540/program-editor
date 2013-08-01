@@ -2,8 +2,8 @@ var M2E = require('m2e');
 var fs = require('fs');
 var path = require('path');
 
-var workerLocation = path.normalize(__dirname + '../live/worker.js');
-var workerFile = fs.readFileSync('/home/joaojeronimo/src/crowdprocess/program-editor/live/worker.js');
+//var workerLocation = path.normalize(__dirname + '../live/worker.js');
+var workerFile = fs.readFileSync(__dirname + '/workerBuild.js');
 
 function createWorker (program) {
   var workerCode = workerFile.replace(/PROGRAM\(\)\;/, takeOutFirstAndLastSemiColons(program));

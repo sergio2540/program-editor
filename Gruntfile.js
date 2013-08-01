@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       },
       worker: {
         src: 'src/worker.js',
-        dest: 'live/worker.js',
+        dest: 'src/workerBuild.js',
         options: {
           //debug: true
         }
@@ -62,7 +62,8 @@ module.exports = function(grunt) {
 
 
   grunt.registerTask('default', ['jshint',
-                                 'browserify',
-                                 'copy']);
+                                 'browserify:worker',
+                                 'copy',
+                                 'browserify:main']);
 
 };
