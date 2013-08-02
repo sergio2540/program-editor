@@ -71,7 +71,7 @@ function dealWithWorkerAndUpdateUI (channel) {
 
 module.exports = dealWithWorkerAndUpdateUI;
 
-},{"./ui/give-feedback":4,"./ui/something-went":5}],6:[function(require,module,exports){
+},{"./ui/something-went":4,"./ui/give-feedback":5}],6:[function(require,module,exports){
 // nothing to see here... no file methods for the browser
 
 },{}],7:[function(require,module,exports){
@@ -320,12 +320,6 @@ function createWorker (program) {
   var workerBlobUrl = URL.createObjectURL(workerBlob);
   var ww = new Worker(workerBlobUrl);
 
-
-  ww.onerror = function (err) {
-    console.error('got a web worker error');
-    console.error(err);
-  };
-
   var channel = new M2E();
 
   channel.sendMessage = ww.postMessage.bind(ww);
@@ -333,10 +327,10 @@ function createWorker (program) {
     channel.onMessage(m.data);
   };
 
-  channel.on('error', function (err) {
-    console.log('got an error!');
-    console.error(err);
-  });
+  ww.onerror = function (err) {
+    console.log('will try to emit an error');
+    channel.emit('error', err);
+  };
 
   channel.on('log', function (args) {
     console.log.apply(console, args);
@@ -433,17 +427,6 @@ M2E.event2message = event2message;
 M2E.message2event = message2event;
 
 },{"events":10}],4:[function(require,module,exports){
-var feedback = document.querySelector('#feedback');
-
-function giveFeedback (el) {
-  if (feedback.children.length === 0)
-    feedback.appendChild(el);
-  else
-    feedback.insertBefore(el, feedback.children[0]);
-}
-
-module.exports = giveFeedback;
-},{}],5:[function(require,module,exports){
 function somethingWent (msg, how) {
   var el = document.createElement('div');
   el.classList.add('alert');
@@ -465,6 +448,17 @@ function somethingWentBad (msg) {
 
 exports.well = somethingWentWell;
 exports.bad = somethingWentBad;
+},{}],5:[function(require,module,exports){
+var feedback = document.querySelector('#feedback');
+
+function giveFeedback (el) {
+  if (feedback.children.length === 0)
+    feedback.appendChild(el);
+  else
+    feedback.insertBefore(el, feedback.children[0]);
+}
+
+module.exports = giveFeedback;
 },{}],10:[function(require,module,exports){
 (function(process){if (!process.EventEmitter) process.EventEmitter = function () {};
 

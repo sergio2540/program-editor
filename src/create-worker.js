@@ -11,12 +11,6 @@ function createWorker (program) {
   var workerBlobUrl = URL.createObjectURL(workerBlob);
   var ww = new Worker(workerBlobUrl);
 
-
-  ww.onerror = function (err) {
-    console.error('got a web worker error');
-    console.error(err);
-  };
-
   var channel = new M2E();
 
   channel.sendMessage = ww.postMessage.bind(ww);
@@ -24,10 +18,10 @@ function createWorker (program) {
     channel.onMessage(m.data);
   };
 
-  channel.on('error', function (err) {
-    console.log('got an error!');
-    console.error(err);
-  });
+  ww.onerror = function (err) {
+    console.log('will try to emit an error');
+    channel.emit('error', err);
+  };
 
   channel.on('log', function (args) {
     console.log.apply(console, args);
