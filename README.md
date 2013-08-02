@@ -23,3 +23,7 @@ also report errors and timings.
 ### Gotchas
 
 * The line numbers of the error reports are not ok, I cannot provide a proper view-source link, or get source maps to work on web workers. So yes the error reporting is sad.
+
+* If this is not a browserified bundle, your Run function must be at the top
+of your `program.js`, because of the messed up way it's concatenated when the
+Web Worker is built. This will be fixed in the next versions. So your `program.js` file should really start with `function Run (dataUnit) {....}`.
