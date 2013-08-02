@@ -2,7 +2,10 @@ var M2E = require('m2e');
 var fs = require('fs');
 var path = require('path');
 
-//var workerLocation = path.normalize(__dirname + '../live/worker.js');
+var properProgramError = require('./ui/proper-program-error');
+var somethingWentBad = require('./ui/something-went').bad;
+var giveFeedback = require('./ui/give-feedback');
+
 var workerFile = fs.readFileSync(__dirname + '/workerBuild.js');
 
 function createWorker (program) {
@@ -19,8 +22,9 @@ function createWorker (program) {
   };
 
   ww.onerror = function (err) {
-    console.log('will try to emit an error');
-    channel.emit('error', err);
+    var programError = properProgramError(err);
+    var bad = somethingWentBad(programError);
+    giveFeedback(bad);
   };
 
   channel.on('log', function (args) {

@@ -22,15 +22,15 @@ module.exports = function(grunt) {
         src: 'src/main.js',
         dest: 'live/main.js',
         options: {
-          transform: ['brfs']
-          //debug: true
+          transform: ['brfs'],
+          debug: true
         }
       },
       worker: {
         src: 'src/worker.js',
         dest: 'src/workerBuild.js', // because of brfs
         options: {
-          //debug: true
+          debug: true
         }
       }
     },
