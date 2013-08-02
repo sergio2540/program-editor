@@ -18,14 +18,14 @@ function createServer(programPath) {
   wss.on('connection', function(ws) {
     sendProgram(ws, programPath, sentProgram);
 
-    fs.watch(programPath, function (ev, filename) {
-      if (ev !== 'change')
-        return; // don't care
+    fs.watchFile(programPath, {
+      persistent: true,
+      interval: 200
+    }, function (prev, cur) {
       sendProgram(ws, programPath, sentProgram);
     });
 
     ws.on('close', function() {
-      console.log('unwatching!');
       fs.unwatchFile(programPath);
     });
   });
@@ -36,7 +36,6 @@ function createServer(programPath) {
 function sentProgram (err) {
   if (err)
     throw new Error(err);
-  console.log('sent new program');
 }
 
 module.exports = createServer;
