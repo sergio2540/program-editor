@@ -71,7 +71,10 @@ function dealWithWorkerAndUpdateUI (channel) {
 
 module.exports = dealWithWorkerAndUpdateUI;
 
-},{"./ui/something-went":4,"./ui/give-feedback":5}],6:[function(require,module,exports){
+},{"./ui/give-feedback":4,"./ui/something-went":5}],6:[function(require,module,exports){
+// nothing to see here... no file methods for the browser
+
+},{}],7:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -125,7 +128,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function(process){function filter (xs, fn) {
     var res = [];
     for (var i = 0; i < xs.length; i++) {
@@ -303,7 +306,7 @@ exports.relative = function(from, to) {
 };
 
 })(require("__browserify_process"))
-},{"__browserify_process":6}],3:[function(require,module,exports){
+},{"__browserify_process":7}],3:[function(require,module,exports){
 (function(){var M2E = require('m2e');
 var fs = require('fs');
 var path = require('path');
@@ -316,12 +319,24 @@ function createWorker (program) {
   var workerBlob = new Blob([workerCode], { 'type' : 'text\/javascript' });
   var workerBlobUrl = URL.createObjectURL(workerBlob);
   var ww = new Worker(workerBlobUrl);
+
+
+  ww.onerror = function (err) {
+    console.error('got a web worker error');
+    console.error(err);
+  };
+
   var channel = new M2E();
 
   channel.sendMessage = ww.postMessage.bind(ww);
   ww.onmessage = function(m) {
     channel.onMessage(m.data);
   };
+
+  channel.on('error', function (err) {
+    console.log('got an error!');
+    console.error(err);
+  });
 
   channel.on('log', function (args) {
     console.log.apply(console, args);
@@ -343,10 +358,7 @@ function takeOutFirstAndLastSemiColons(str) {
 module.exports = createWorker;
 
 })()
-},{"fs":8,"path":7,"m2e":9}],8:[function(require,module,exports){
-// nothing to see here... no file methods for the browser
-
-},{}],9:[function(require,module,exports){
+},{"fs":6,"path":8,"m2e":9}],9:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter;
 
 var SEPARATOR = ':';
@@ -420,7 +432,7 @@ module.exports = M2E;
 M2E.event2message = event2message;
 M2E.message2event = message2event;
 
-},{"events":10}],5:[function(require,module,exports){
+},{"events":10}],4:[function(require,module,exports){
 var feedback = document.querySelector('#feedback');
 
 function giveFeedback (el) {
@@ -431,7 +443,7 @@ function giveFeedback (el) {
 }
 
 module.exports = giveFeedback;
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 function somethingWent (msg, how) {
   var el = document.createElement('div');
   el.classList.add('alert');
@@ -639,5 +651,5 @@ EventEmitter.prototype.listeners = function(type) {
 };
 
 })(require("__browserify_process"))
-},{"__browserify_process":6}]},{},[1])
+},{"__browserify_process":7}]},{},[1])
 ;

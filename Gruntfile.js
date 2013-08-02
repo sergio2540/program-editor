@@ -5,12 +5,17 @@ module.exports = function(grunt) {
       options: {
         browser: true,
         shadow: true,
-        '-W024': true
+        '-W024': true,
+        ignores: [
+          'src/workerBuild.js' // because of brfs
+        ]
       },
-      all: ['*.js',
-            'lib/*.js',
-            'static-assets/*.js',
-            'src/**/*.js']
+      all: [
+        '*.js',
+        'lib/*.js',
+        'static-assets/*.js',
+        'src/**/*.js'
+      ]
     },
     browserify: {
       main: {
@@ -23,7 +28,7 @@ module.exports = function(grunt) {
       },
       worker: {
         src: 'src/worker.js',
-        dest: 'src/workerBuild.js',
+        dest: 'src/workerBuild.js', // because of brfs
         options: {
           //debug: true
         }

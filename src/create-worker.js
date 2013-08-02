@@ -27,7 +27,7 @@ function createWorker (program) {
   channel.on('error', function (err) {
     console.log('got an error!');
     console.error(err);
-  })
+  });
 
   channel.on('log', function (args) {
     console.log.apply(console, args);
