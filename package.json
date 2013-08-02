@@ -15,17 +15,17 @@
     "live": "./node_modules/live-server/live-server.js ./live"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-browserify": "~0.2.3",
-    "grunt-contrib-watch": "~0.3.1",
     "grunt-contrib-copy": "~0.4.1",
-    "brfs": "0.0.4",
-    "grunt-contrib-jshint": "~0.6.2"
+    "brfs": "0.0.6",
+    "grunt-contrib-jshint": "~0.6.2",
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.1",
+    "grunt-browserify": "~1.2.1"
   },
   "dependencies": {
-    "express": "~3.2.1",
-    "ws": "~0.4.25",
     "m2e": "~0.6.1",
-    "optimist": "~0.6.0"
+    "optimist": "~0.6.0",
+    "ws": "~0.4.27",
+    "express": "~3.3.4"
   }
 }
