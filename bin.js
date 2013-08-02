@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 var optimist = require('optimist');
 var argv = optimist
-  .usage('Usage: ploy')
+  .usage('Usage: program-editor -p program.js')
   .describe('p', 'Path to your program')
   .string('p')
   .alias('p', 'program')
+  .demand('p')
   .argv;
 
 var createServer = require('./server');

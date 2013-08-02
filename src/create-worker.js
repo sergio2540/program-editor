@@ -10,12 +10,24 @@ function createWorker (program) {
   var workerBlob = new Blob([workerCode], { 'type' : 'text\/javascript' });
   var workerBlobUrl = URL.createObjectURL(workerBlob);
   var ww = new Worker(workerBlobUrl);
+
+
+  ww.onerror = function (err) {
+    console.error('got a web worker error');
+    console.error(err);
+  };
+
   var channel = new M2E();
 
   channel.sendMessage = ww.postMessage.bind(ww);
   ww.onmessage = function(m) {
     channel.onMessage(m.data);
   };
+
+  channel.on('error', function (err) {
+    console.log('got an error!');
+    console.error(err);
+  })
 
   channel.on('log', function (args) {
     console.log.apply(console, args);
