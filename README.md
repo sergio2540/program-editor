@@ -4,7 +4,7 @@ It's not an editor, it's supposed to be used to test how CrowdProcess Programs b
 
 ## Installation
 
-    `npm install -g git+https://github.com/CrowdProcess/program-editor.git`
+    npm install -g git+https://github.com/CrowdProcess/program-editor.git
 
 ## Usage
 
